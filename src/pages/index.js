@@ -191,18 +191,64 @@ function LoadingState() {
   );
 }
 
-function ErrorState({ error, onRetry, onUseSample }) {
+function GeneratingState() {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "120px 40px", gap: 20 }}>
+      <div style={{ width: 48, height: 48, border: "3px solid rgba(78,159,255,0.2)", borderTop: "3px solid #4E9FFF", borderRadius: "50%", animation: "spin 1s linear infinite" }} />
+      <div style={{ fontFamily: "'Newsreader', serif", fontSize: 20, color: "#E8ECF4" }}>Generating your briefing...</div>
+      <div style={{ fontSize: 14, color: "#8B95A8", textAlign: "center", maxWidth: 400 }}>
+        The Brief agent is scanning sources and curating stories. This usually takes 2-3 minutes.
+      </div>
+      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#5A6377", marginTop: 8, animation: "pulse 2s infinite" }}>
+        Checking for results...
+      </div>
+    </div>
+  );
+}
+
+function EmptyState({ onGenerate, onUseSample, generating }) {
+  if (generating) return <GeneratingState />;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "120px 40px", gap: 20 }}>
+      <div style={{ fontFamily: "'Newsreader', serif", fontSize: 32, fontWeight: 700, color: "#E8ECF4", letterSpacing: -0.5 }}>
+        The <span style={{ color: "#4E9FFF" }}>Brief</span>
+      </div>
+      <div style={{ fontSize: 15, color: "#8B95A8", textAlign: "center", maxWidth: 440, lineHeight: 1.6 }}>
+        Your personalized AI news briefing. Click below to generate today's edition.
+      </div>
+      <div style={{ display: "flex", gap: 12, marginTop: 12 }}>
+        <button onClick={onGenerate} style={{
+          padding: "14px 32px", borderRadius: 100,
+          background: "linear-gradient(135deg, #4E9FFF, #A78BFA)",
+          border: "none", color: "white", fontSize: 15,
+          fontWeight: 600, cursor: "pointer", letterSpacing: 0.3,
+          display: "flex", alignItems: "center", gap: 10,
+        }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          Generate News
+        </button>
+        <button onClick={onUseSample} style={{
+          padding: "14px 24px", borderRadius: 100, background: "rgba(255,255,255,0.06)",
+          border: "1px solid rgba(255,255,255,0.1)", color: "#8B95A8", fontSize: 14,
+          fontWeight: 600, cursor: "pointer"
+        }}>Preview with Sample Data</button>
+      </div>
+    </div>
+  );
+}
+
+function ErrorState({ error, onGenerate, onUseSample }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "120px 40px", gap: 16 }}>
-      <div style={{ fontSize: 40, marginBottom: 8 }}>⚠</div>
-      <div style={{ fontFamily: "'Newsreader', serif", fontSize: 18, color: "#E8ECF4" }}>Couldn't load today's briefing</div>
+      <div style={{ fontSize: 40, marginBottom: 8 }}>!</div>
+      <div style={{ fontFamily: "'Newsreader', serif", fontSize: 18, color: "#E8ECF4" }}>Something went wrong</div>
       <div style={{ fontSize: 14, color: "#8B95A8", textAlign: "center", maxWidth: 400 }}>{error}</div>
       <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
-        <button onClick={onRetry} style={{
+        <button onClick={onGenerate} style={{
           padding: "10px 24px", borderRadius: 100, background: "rgba(78,159,255,0.1)",
           border: "1px solid rgba(78,159,255,0.25)", color: "#4E9FFF", fontSize: 14,
           fontWeight: 600, cursor: "pointer"
-        }}>Try Again</button>
+        }}>Generate News</button>
         <button onClick={onUseSample} style={{
           padding: "10px 24px", borderRadius: 100, background: "rgba(255,255,255,0.06)",
           border: "1px solid rgba(255,255,255,0.1)", color: "#8B95A8", fontSize: 14,
@@ -223,6 +269,8 @@ export default function TheBrief() {
   const [activeFilter, setActiveFilter] = useState("ALL");
   const [usingSample, setUsingSample] = useState(false);
   const [lastRefreshed, setLastRefreshed] = useState(null);
+  const [generating, setGenerating] = useState(false);
+  const [noData, setNoData] = useState(false);
 
   const fetchBriefing = useCallback(async () => {
     setLoading(true);
@@ -230,12 +278,19 @@ export default function TheBrief() {
     setUsingSample(false);
     try {
       const res = await fetch('/api/briefing');
+      if (res.status === 503) {
+        setNoData(true);
+        setLoading(false);
+        return;
+      }
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
         throw new Error(errData.error || `API returned ${res.status}`);
       }
       const json = await res.json();
       setData(json);
+      setNoData(false);
+      setGenerating(false);
       if (json._cachedAt) {
         setLastRefreshed(new Date(json._cachedAt));
       }
@@ -247,11 +302,51 @@ export default function TheBrief() {
     }
   }, []);
 
+  const triggerGenerate = useCallback(async () => {
+    setGenerating(true);
+    setError(null);
+    setNoData(false);
+    try {
+      const res = await fetch('/api/trigger-refresh', { method: 'POST' });
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || 'Failed to trigger generation');
+      }
+    } catch (err) {
+      console.error('Trigger failed:', err);
+      setError(err.message);
+      setGenerating(false);
+    }
+  }, []);
+
+  // Poll for results while generating
+  useEffect(() => {
+    if (!generating) return;
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch('/api/briefing');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.stories) {
+            setData(json);
+            setGenerating(false);
+            setNoData(false);
+            setLoading(false);
+            if (json._cachedAt) setLastRefreshed(new Date(json._cachedAt));
+          }
+        }
+      } catch {}
+    }, 15000);
+    return () => clearInterval(interval);
+  }, [generating]);
+
   const useSampleData = useCallback(() => {
     setData(SAMPLE_DATA);
     setError(null);
     setLoading(false);
     setUsingSample(true);
+    setGenerating(false);
+    setNoData(false);
   }, []);
 
   useEffect(() => {
@@ -337,8 +432,9 @@ export default function TheBrief() {
       {/* MAIN */}
       <main style={{ maxWidth: 1280, margin: "0 auto", padding: "32px 40px 80px", position: "relative", zIndex: 1 }}>
 
-        {loading && <LoadingState />}
-        {error && !data && <ErrorState error={error} onRetry={fetchBriefing} onUseSample={useSampleData} />}
+        {loading && !generating && <LoadingState />}
+        {(noData || generating) && !data && !error && <EmptyState onGenerate={triggerGenerate} onUseSample={useSampleData} generating={generating} />}
+        {error && !data && <ErrorState error={error} onGenerate={triggerGenerate} onUseSample={useSampleData} />}
 
         {data && (
           <>
@@ -453,15 +549,25 @@ export default function TheBrief() {
             </div>
 
             {/* REFRESH BUTTON */}
-            <div style={{ display: "flex", justifyContent: "center", marginTop: 32 }}>
-              <button onClick={fetchBriefing} style={{
-                padding: "10px 28px", borderRadius: 100, background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.08)", color: "#5A6377", fontSize: 13,
-                fontWeight: 500, cursor: "pointer", transition: "all 0.2s",
-                display: "flex", alignItems: "center", gap: 8
+            <div style={{ display: "flex", justifyContent: "center", gap: 12, marginTop: 32 }}>
+              <button onClick={() => { triggerGenerate(); }} disabled={generating} style={{
+                padding: "10px 28px", borderRadius: 100,
+                background: generating ? "rgba(78,159,255,0.05)" : "rgba(78,159,255,0.1)",
+                border: "1px solid rgba(78,159,255,0.25)", color: "#4E9FFF", fontSize: 13,
+                fontWeight: 600, cursor: generating ? "not-allowed" : "pointer", transition: "all 0.2s",
+                display: "flex", alignItems: "center", gap: 8, opacity: generating ? 0.6 : 1,
               }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 4v6h6M23 20v-6h-6" /><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" /></svg>
-                Refresh Briefing
+                {generating ? (
+                  <>
+                    <div style={{ width: 14, height: 14, border: "2px solid rgba(78,159,255,0.3)", borderTop: "2px solid #4E9FFF", borderRadius: "50%", animation: "spin 1s linear infinite" }} />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 4v6h6M23 20v-6h-6" /><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" /></svg>
+                    Generate Fresh Briefing
+                  </>
+                )}
               </button>
             </div>
           </>
