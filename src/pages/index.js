@@ -11,17 +11,22 @@ const SAMPLE_DATA = {
     action: "Test Opus 4.6's finance capabilities on your EMI sector analysis workflow this week."
   },
   stories: [
-    { rank: 1, pillar: "FRONTIER", headline: "Anthropic Releases Claude Opus 4.6 with Major Agentic and Finance Upgrades", teaser: "The most capable Claude yet — enhanced agentic coding, tool orchestration, and new finance-specific reasoning.", source: "Anthropic Blog", source_url: "https://www.anthropic.com/news/claude-opus-4-6", thumbnail_url: null, time_ago: "2 hours ago", summary: "Anthropic launched Claude Opus 4.6, its most capable model to date. Key improvements include enhanced agentic coding, computer use, multi-step tool orchestration, and new finance-specific reasoning capabilities.", relevance: "The finance upgrades are directly applicable to your EMI sector analysis at URS. The improved tool orchestration also means your Kalos agents on MindStudio could handle more complex multi-step workflows." },
+    { rank: 1, pillar: "PRACTICAL", headline: "Anthropic Releases Claude Opus 4.6 with Major Agentic and Finance Upgrades", teaser: "The most capable Claude yet — enhanced agentic coding, tool orchestration, and new finance-specific reasoning.", source: "Anthropic Blog", source_url: "https://www.anthropic.com/news/claude-opus-4-6", thumbnail_url: null, time_ago: "2 hours ago", summary: "Anthropic launched Claude Opus 4.6, its most capable model to date. Key improvements include enhanced agentic coding, computer use, multi-step tool orchestration, and new finance-specific reasoning capabilities.", relevance: "The finance upgrades are directly applicable to your EMI sector analysis at URS. The improved tool orchestration also means your Kalos agents on MindStudio could handle more complex multi-step workflows." },
     { rank: 2, pillar: "PRACTICAL", headline: "MindStudio Launches Native JSON Output Mode for Agent APIs", teaser: "Structured JSON output from agent runs via API — build custom frontends that consume agent data programmatically.", source: "MindStudio Blog", source_url: "https://www.mindstudio.ai/blog", thumbnail_url: null, time_ago: "5 hours ago", summary: "MindStudio now supports structured JSON output from agent runs via API, making it significantly easier to build custom frontends that consume agent-generated data programmatically.", relevance: "This is exactly what you need to connect The Brief agent to your custom dashboard. JSON output mode eliminates the need to parse unstructured text — your frontend can consume clean, typed data directly." },
-    { rank: 3, pillar: "ECONOMICS", headline: "Microsoft Reports $18B Cloud AI Revenue Run Rate, Capex Guidance Up 40%", teaser: "AI cloud revenue growing 150% YoY with a massive capex increase signaling sustained infrastructure demand.", source: "Bloomberg", source_url: "https://www.bloomberg.com/technology", thumbnail_url: null, time_ago: "8 hours ago", summary: "Microsoft disclosed its AI-specific cloud revenue has reached an $18B annual run rate, growing 150% year-over-year. The company also raised its FY26 capital expenditure guidance by 40% to fund AI infrastructure buildout.", relevance: "The 40% capex increase signals sustained infrastructure demand that feeds directly into your EMI thesis at URS — particularly power generation, data center cooling, and energy infrastructure assets." },
-    { rank: 4, pillar: "FRONTIER", headline: "DeepMind Publishes Research on Multi-Agent Orchestration Architectures", teaser: "A modular framework for multi-agent systems with structured message passing and central orchestration.", source: "ArXiv", source_url: "https://arxiv.org", thumbnail_url: null, time_ago: "12 hours ago", summary: "Google DeepMind released a paper proposing a modular framework for multi-agent systems where specialized agents communicate through structured message passing, with a central orchestrator managing task delegation.", relevance: "This architecture pattern mirrors what you're building with The Brief — separate vertical agents feeding into an orchestration layer. Worth reading for design validation and ideas on inter-agent communication." },
-    { rank: 5, pillar: "POLICY", headline: "SEC Issues First Guidance on AI-Generated Investment Research Disclosures", teaser: "New disclosure requirements when AI tools are used to generate investment research and recommendations.", source: "Reuters", source_url: "https://www.reuters.com/technology", thumbnail_url: null, time_ago: "14 hours ago", summary: "The SEC published interpretive guidance requiring investment advisors to disclose when AI tools are used in generating research reports and investment recommendations shared with clients.", relevance: "As URS integrates AI tooling into investment analysis workflows, this disclosure requirement will shape how your team documents and presents AI-assisted research to the board and beneficiaries." },
-    { rank: 6, pillar: "PRACTICAL", headline: 'New Prompting Technique "Chain of Draft" Reduces Token Usage by 80%', teaser: "Comparable reasoning quality to chain-of-thought at a fraction of the token cost — major implications for API economics.", source: "@karpathy on X", source_url: "https://x.com/karpathy", thumbnail_url: null, time_ago: "6 hours ago", summary: 'Andrej Karpathy shared a new prompting approach called "Chain of Draft" that achieves comparable reasoning quality to chain-of-thought while using dramatically fewer tokens, significantly reducing API costs.', relevance: "If this holds up, it directly reduces Kalos operating costs. Worth testing on your MindStudio agents — an 80% token reduction would fundamentally change your unit economics." }
+    { rank: 3, pillar: "PRACTICAL", headline: 'New Prompting Technique "Chain of Draft" Reduces Token Usage by 80%', teaser: "Comparable reasoning quality to chain-of-thought at a fraction of the token cost — major implications for API economics.", source: "@karpathy on X", source_url: "https://x.com/karpathy", thumbnail_url: null, time_ago: "6 hours ago", summary: 'Andrej Karpathy shared a new prompting approach called "Chain of Draft" that achieves comparable reasoning quality to chain-of-thought while using dramatically fewer tokens, significantly reducing API costs.', relevance: "If this holds up, it directly reduces Kalos operating costs. Worth testing on your MindStudio agents — an 80% token reduction would fundamentally change your unit economics." },
+    { rank: 4, pillar: "PRACTICAL", headline: "Claude Code Now Supports MCP Server Chaining for Multi-Tool Workflows", teaser: "Chain multiple MCP servers together in a single Claude Code session for complex automated pipelines.", source: "Anthropic Docs", source_url: "https://docs.anthropic.com/en/docs/claude-code", thumbnail_url: null, time_ago: "4 hours ago", summary: "Anthropic updated Claude Code to support chaining multiple MCP servers in a single session, enabling complex multi-tool workflows without leaving the terminal. This allows combining browser automation, file operations, and API calls in one pipeline.", relevance: "This directly upgrades your Claude Code workflow. You could chain Figma MCP + file system + Vercel deploy into a single session — design to production without context switching." },
+    { rank: 5, pillar: "FRONTIER", headline: "DeepMind Publishes Research on Multi-Agent Orchestration Architectures", teaser: "A modular framework for multi-agent systems with structured message passing and central orchestration.", source: "ArXiv", source_url: "https://arxiv.org", thumbnail_url: null, time_ago: "12 hours ago", summary: "Google DeepMind released a paper proposing a modular framework for multi-agent systems where specialized agents communicate through structured message passing, with a central orchestrator managing task delegation.", relevance: "This architecture pattern mirrors what you're building with The Brief — separate vertical agents feeding into an orchestration layer. Worth reading for design validation and ideas on inter-agent communication." },
+    { rank: 6, pillar: "FRONTIER", headline: "OpenAI Announces GPT-5 Turbo with Native Tool Use and 2M Context Window", teaser: "A major leap in context length and built-in tool calling that reshapes what's possible in a single prompt.", source: "OpenAI Blog", source_url: "https://openai.com/blog", thumbnail_url: null, time_ago: "3 hours ago", summary: "OpenAI released GPT-5 Turbo with a 2M token context window and native tool use baked into the model. Early benchmarks show significant improvements in multi-step reasoning and code generation tasks.", relevance: "The 2M context window changes the game for long-document analysis at URS. Worth benchmarking against Claude for your EMI sector reports to see which handles dense financial data better." },
+    { rank: 7, pillar: "ECONOMICS", headline: "Microsoft Reports $18B Cloud AI Revenue Run Rate, Capex Guidance Up 40%", teaser: "AI cloud revenue growing 150% YoY with a massive capex increase signaling sustained infrastructure demand.", source: "Bloomberg", source_url: "https://www.bloomberg.com/technology", thumbnail_url: null, time_ago: "8 hours ago", summary: "Microsoft disclosed its AI-specific cloud revenue has reached an $18B annual run rate, growing 150% year-over-year. The company also raised its FY26 capital expenditure guidance by 40% to fund AI infrastructure buildout.", relevance: "The 40% capex increase signals sustained infrastructure demand that feeds directly into your EMI thesis at URS — particularly power generation, data center cooling, and energy infrastructure assets." },
+    { rank: 8, pillar: "ECONOMICS", headline: "Anthropic Closes $3B Series D at $40B Valuation, Revenue Up 10x YoY", teaser: "Anthropic's growth trajectory validates the concentrated bet on Claude as a primary AI ecosystem.", source: "The Information", source_url: "https://www.theinformation.com", thumbnail_url: null, time_ago: "10 hours ago", summary: "Anthropic closed a $3 billion Series D round at a $40 billion valuation, with revenue reportedly growing 10x year-over-year. The funding will accelerate compute infrastructure and model development.", relevance: "This validates your concentrated bet on the Anthropic ecosystem. A well-funded Anthropic means continued rapid improvement to Claude Code, Cowork, and the tools you build Kalos on." },
+    { rank: 9, pillar: "GEOPOLITICAL", headline: "SEC Issues First Guidance on AI-Generated Investment Research Disclosures", teaser: "New disclosure requirements when AI tools are used to generate investment research and recommendations.", source: "Reuters", source_url: "https://www.reuters.com/technology", thumbnail_url: null, time_ago: "14 hours ago", summary: "The SEC published interpretive guidance requiring investment advisors to disclose when AI tools are used in generating research reports and investment recommendations shared with clients.", relevance: "As URS integrates AI tooling into investment analysis workflows, this disclosure requirement will shape how your team documents and presents AI-assisted research to the board and beneficiaries." },
+    { rank: 10, pillar: "GEOPOLITICAL", headline: "US Expands AI Chip Export Controls to Cover Inference-Optimized Hardware", teaser: "New restrictions close the inference chip loophole, reshaping the global AI compute supply chain.", source: "Reuters", source_url: "https://www.reuters.com/technology", thumbnail_url: null, time_ago: "16 hours ago", summary: "The Commerce Department expanded AI chip export controls to include inference-optimized processors, closing a loophole that allowed shipment of non-training hardware to restricted countries. The move affects NVIDIA, AMD, and emerging chip designers.", relevance: "This reshapes global AI compute supply chains — directly relevant to your EMI infrastructure thesis. Restricted chip flows mean more domestic data center buildout and higher energy demand in approved regions." }
   ],
   quick_hits: [
     { text: "Cursor IDE raised a $400M Series C at a $10B valuation, signaling continued investor appetite for AI coding tools.", source: "TechCrunch", url: "https://techcrunch.com" },
     { text: "ElevenLabs launched a podcast generation API with custom voice cloning — relevant for your podcast feature roadmap.", source: "ElevenLabs Blog", url: "https://elevenlabs.io/blog" },
-    { text: "The EU AI Act's first enforcement provisions take effect March 1, affecting high-risk AI system classifications.", source: "Reuters", url: "https://reuters.com/technology" }
+    { text: "The EU AI Act's first enforcement provisions take effect March 1, affecting high-risk AI system classifications.", source: "Reuters", url: "https://reuters.com/technology" },
+    { text: "Vercel shipped a native MCP server for deployment management — useful for automating The Brief's deploy pipeline.", source: "Vercel Blog", url: "https://vercel.com/blog" }
   ],
   watch: { title: "OpenAI Developer Day — February 20", text: "Expect new model announcements and API feature releases. Watch for anything that shifts the Anthropic vs. OpenAI competitive landscape.", date_label: "5 days away" },
   podcast: { available: false, duration: null, url: null }
@@ -34,7 +39,7 @@ const PILLAR_CONFIG = {
   PRACTICAL: { label: "Practical", color: "#34D399", dim: "rgba(52,211,153,0.12)", border: "rgba(52,211,153,0.3)" },
   FRONTIER: { label: "Frontier", color: "#4E9FFF", dim: "rgba(78,159,255,0.12)", border: "rgba(78,159,255,0.3)" },
   ECONOMICS: { label: "Economics", color: "#FBBF24", dim: "rgba(251,191,36,0.12)", border: "rgba(251,191,36,0.3)" },
-  POLICY: { label: "Policy", color: "#A78BFA", dim: "rgba(167,139,250,0.12)", border: "rgba(167,139,250,0.3)" },
+  GEOPOLITICAL: { label: "Geopolitical", color: "#A78BFA", dim: "rgba(167,139,250,0.12)", border: "rgba(167,139,250,0.3)" },
 };
 
 const GRADIENT_BG = [
@@ -362,7 +367,7 @@ export default function TheBrief() {
     { key: "PRACTICAL", label: "Practical" },
     { key: "FRONTIER", label: "Frontier" },
     { key: "ECONOMICS", label: "Economics" },
-    { key: "POLICY", label: "Policy" },
+    { key: "GEOPOLITICAL", label: "Geopolitical" },
   ];
 
   return (
@@ -375,7 +380,7 @@ export default function TheBrief() {
 
       <style jsx global>{`
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #0C0F14; color: #E8ECF4; font-family: 'DM Sans', sans-serif; }
+        body { background: #0C0F14; color: #E8ECF4; font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -384,7 +389,57 @@ export default function TheBrief() {
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
         a { color: #4E9FFF; text-decoration: none; }
         a:hover { text-decoration: underline; }
+
+        @keyframes ambientDrift1 {
+          0%   { transform: translate(0%, 0%) scale(1); opacity: 0.04; }
+          25%  { transform: translate(15%, -10%) scale(1.1); opacity: 0.07; }
+          50%  { transform: translate(-5%, 15%) scale(0.95); opacity: 0.03; }
+          75%  { transform: translate(-15%, -5%) scale(1.15); opacity: 0.06; }
+          100% { transform: translate(0%, 0%) scale(1); opacity: 0.04; }
+        }
+        @keyframes ambientDrift2 {
+          0%   { transform: translate(0%, 0%) scale(1); opacity: 0.03; }
+          30%  { transform: translate(-20%, 10%) scale(1.2); opacity: 0.06; }
+          60%  { transform: translate(10%, -15%) scale(0.9); opacity: 0.02; }
+          100% { transform: translate(0%, 0%) scale(1); opacity: 0.03; }
+        }
+        @keyframes ambientDrift3 {
+          0%   { transform: translate(0%, 0%) scale(1.1); opacity: 0.025; }
+          35%  { transform: translate(10%, 20%) scale(0.85); opacity: 0.055; }
+          65%  { transform: translate(-10%, -10%) scale(1.2); opacity: 0.02; }
+          100% { transform: translate(0%, 0%) scale(1.1); opacity: 0.025; }
+        }
+        @keyframes ambientDrift4 {
+          0%   { transform: translate(0%, 0%) scale(0.9); opacity: 0.02; }
+          40%  { transform: translate(-8%, -18%) scale(1.15); opacity: 0.05; }
+          70%  { transform: translate(12%, 8%) scale(1); opacity: 0.015; }
+          100% { transform: translate(0%, 0%) scale(0.9); opacity: 0.02; }
+        }
       `}</style>
+
+      {/* Ambient living background */}
+      <div style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none", overflow: "hidden" }}>
+        <div style={{
+          position: "absolute", width: "60vw", height: "60vw", top: "-10%", left: "-10%",
+          borderRadius: "50%", background: "radial-gradient(circle, #4E9FFF 0%, transparent 70%)",
+          filter: "blur(120px)", animation: "ambientDrift1 18s ease-in-out infinite",
+        }} />
+        <div style={{
+          position: "absolute", width: "50vw", height: "50vw", bottom: "-15%", right: "-10%",
+          borderRadius: "50%", background: "radial-gradient(circle, #A78BFA 0%, transparent 70%)",
+          filter: "blur(140px)", animation: "ambientDrift2 23s ease-in-out infinite",
+        }} />
+        <div style={{
+          position: "absolute", width: "45vw", height: "45vw", top: "40%", left: "50%",
+          borderRadius: "50%", background: "radial-gradient(circle, #34D399 0%, transparent 70%)",
+          filter: "blur(130px)", animation: "ambientDrift3 27s ease-in-out infinite",
+        }} />
+        <div style={{
+          position: "absolute", width: "55vw", height: "55vw", top: "10%", right: "30%",
+          borderRadius: "50%", background: "radial-gradient(circle, #FBBF24 0%, transparent 70%)",
+          filter: "blur(150px)", animation: "ambientDrift4 31s ease-in-out infinite",
+        }} />
+      </div>
 
       {/* NAV */}
       <nav style={{
