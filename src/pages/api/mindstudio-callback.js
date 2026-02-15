@@ -22,13 +22,29 @@ export default async function handler(req, res) {
   try {
     const payload = req.body;
 
-    let briefing = payload?.result?.briefingAI;
+    console.log('Callback payload keys:', Object.keys(payload || {}));
+    console.log('Callback payload.result keys:', Object.keys(payload?.result || {}));
+    console.log('Callback payload sample:', JSON.stringify(payload).slice(0, 1000));
+
+    // Try multiple extraction paths — MindStudio may nest data differently
+    let briefing = payload?.result?.briefingAI
+      || payload?.result?.briefing_json
+      || payload?.briefingAI
+      || payload?.result;
+
     if (typeof briefing === 'string') {
-      briefing = JSON.parse(briefing);
+      try { briefing = JSON.parse(briefing); } catch (e) {
+        console.error('Failed to parse briefing string:', briefing.slice(0, 200));
+      }
+    }
+
+    // If result is the briefing itself (has stories directly)
+    if (!briefing?.stories && payload?.result?.stories) {
+      briefing = payload.result;
     }
 
     if (!briefing || !briefing.stories) {
-      console.error('Callback received but no valid briefing data:', JSON.stringify(payload).slice(0, 500));
+      console.error('No valid briefing after all extraction attempts. Payload keys:', Object.keys(payload || {}), 'Result keys:', Object.keys(payload?.result || {}));
       return res.status(400).json({ error: 'No valid briefing data in callback.' });
     }
 
