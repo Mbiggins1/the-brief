@@ -1,64 +1,38 @@
-// src/pages/api/briefing.js
-// Uses the official MindStudio Node SDK
-// API key stays server-side — never exposed to browser
-
-import { MindStudio } from 'mindstudio';
-
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
+  if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const apiKey = process.env.MINDSTUDIO_KEY;
+  const gistRawUrl = process.env.GIST_RAW_URL;
 
-  if (!apiKey) {
+  if (!gistRawUrl) {
     return res.status(500).json({
-      error: 'MINDSTUDIO_KEY not configured. Add it in Vercel → Settings → Environment Variables.'
+      error: 'GIST_RAW_URL not configured. Add it in Vercel Settings.',
     });
   }
 
   try {
-    const client = new MindStudio(apiKey);
+    const url = `${gistRawUrl}?t=${Date.now()}`;
+    const response = await fetch(url);
 
-    const { result, billingCost } = await client.run({
-      workerId: 'c4f9d9eb-0ffd-4dd2-b05e-24e80f319984',
-      workflow: 'Main',
-      variables: {},
-    });
-
-    // result.briefingAI contains the JSON — may be string or object
-    let briefing = result?.briefingAI;
-
-    if (typeof briefing === 'string') {
-      try {
-        briefing = JSON.parse(briefing);
-      } catch (parseErr) {
-        console.error('Failed to parse briefingAI:', parseErr);
-        return res.status(500).json({
-          error: 'Agent returned invalid JSON',
-          raw: briefing,
-        });
-      }
+    if (!response.ok) {
+      throw new Error(`Gist fetch failed: ${response.status}`);
     }
 
-    if (!briefing) {
-      return res.status(500).json({
-        error: 'No briefing data in response',
-        raw: result,
+    const briefing = await response.json();
+
+    if (!briefing.date && !briefing.stories) {
+      return res.status(503).json({
+        error: 'Briefing not yet generated. The background job may not have run yet.',
       });
     }
 
-    // Log billing cost for monitoring
-    if (billingCost) {
-      console.log(`Briefing generated. Cost: ${billingCost}`);
-    }
-
+    res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=3600');
     return res.status(200).json(briefing);
-
   } catch (err) {
-    console.error('MindStudio error:', err.message);
-    return res.status(500).json({
-      error: err.message || 'Failed to fetch briefing',
+    console.error('Gist fetch error:', err.message);
+    return res.status(502).json({
+      error: 'Failed to load cached briefing data.',
     });
   }
 }

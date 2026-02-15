@@ -55,6 +55,16 @@ function formatDate(dateStr) {
   }
 }
 
+function formatRelativeTime(date) {
+  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (seconds < 60) return 'just now';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.floor(hours / 24)}d ago`;
+}
+
 // ============================================================
 // COMPONENTS
 // ============================================================
@@ -175,8 +185,8 @@ function LoadingState() {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "120px 40px", gap: 20 }}>
       <div style={{ width: 40, height: 40, border: "3px solid rgba(78,159,255,0.2)", borderTop: "3px solid #4E9FFF", borderRadius: "50%", animation: "spin 1s linear infinite" }} />
-      <div style={{ fontFamily: "'Newsreader', serif", fontSize: 18, color: "#8B95A8" }}>Generating your briefing...</div>
-      <div style={{ fontSize: 13, color: "#5A6377" }}>The Brief agent is scanning sources and curating stories</div>
+      <div style={{ fontFamily: "'Newsreader', serif", fontSize: 18, color: "#8B95A8" }}>Loading your briefing...</div>
+      <div style={{ fontSize: 13, color: "#5A6377" }}>Fetching the latest cached briefing data</div>
     </div>
   );
 }
@@ -212,19 +222,23 @@ export default function TheBrief() {
   const [error, setError] = useState(null);
   const [activeFilter, setActiveFilter] = useState("ALL");
   const [usingSample, setUsingSample] = useState(false);
+  const [lastRefreshed, setLastRefreshed] = useState(null);
 
   const fetchBriefing = useCallback(async () => {
     setLoading(true);
     setError(null);
     setUsingSample(false);
     try {
-      const res = await fetch('/api/briefing', { method: 'POST' });
+      const res = await fetch('/api/briefing');
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
         throw new Error(errData.error || `API returned ${res.status}`);
       }
       const json = await res.json();
       setData(json);
+      if (json._cachedAt) {
+        setLastRefreshed(new Date(json._cachedAt));
+      }
     } catch (err) {
       console.error('Failed to fetch briefing:', err);
       setError(err.message);
@@ -301,6 +315,11 @@ export default function TheBrief() {
           {usingSample && (
             <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#FBBF24", letterSpacing: 0.5, padding: "4px 10px", background: "rgba(251,191,36,0.1)", borderRadius: 100 }}>
               SAMPLE DATA
+            </span>
+          )}
+          {lastRefreshed && (
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#5A6377", letterSpacing: 0.3 }}>
+              Updated {formatRelativeTime(lastRefreshed)}
             </span>
           )}
           <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: "#5A6377", letterSpacing: 0.5 }}>
