@@ -25,6 +25,4 @@ jobs:
       - name: Run briefing refresh
         env:
           MINDSTUDIO_KEY: ${{ secrets.MINDSTUDIO_KEY }}
-          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
-          GIST_ID: ${{ vars.GIST_ID }}
         run: node scripts/refresh-briefing.mjs
