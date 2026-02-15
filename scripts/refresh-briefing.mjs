@@ -8,7 +8,7 @@ async function triggerBriefing() {
 
   console.log(`Triggering with callbackUrl: ${callbackUrl}`);
   await client.run({
-    workerId: 'c4f9d9eb-0ffd-4dd2-b05e-24e80f319984',
+    workerId: '7492ab09-9841-41ea-a7af-995e3fe5bd75',
     workflow: 'Main',
     variables: {},
     callbackUrl,
