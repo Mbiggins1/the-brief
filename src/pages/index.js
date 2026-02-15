@@ -391,29 +391,29 @@ export default function TheBrief() {
         a:hover { text-decoration: underline; }
 
         @keyframes ambientDrift1 {
-          0%   { transform: translate(0%, 0%) scale(1); opacity: 0.04; }
-          25%  { transform: translate(15%, -10%) scale(1.1); opacity: 0.07; }
-          50%  { transform: translate(-5%, 15%) scale(0.95); opacity: 0.03; }
-          75%  { transform: translate(-15%, -5%) scale(1.15); opacity: 0.06; }
-          100% { transform: translate(0%, 0%) scale(1); opacity: 0.04; }
+          0%   { transform: translate(0%, 0%) scale(1); opacity: 0.1; }
+          25%  { transform: translate(15%, -10%) scale(1.1); opacity: 0.18; }
+          50%  { transform: translate(-5%, 15%) scale(0.95); opacity: 0.08; }
+          75%  { transform: translate(-15%, -5%) scale(1.15); opacity: 0.15; }
+          100% { transform: translate(0%, 0%) scale(1); opacity: 0.1; }
         }
         @keyframes ambientDrift2 {
-          0%   { transform: translate(0%, 0%) scale(1); opacity: 0.03; }
-          30%  { transform: translate(-20%, 10%) scale(1.2); opacity: 0.06; }
-          60%  { transform: translate(10%, -15%) scale(0.9); opacity: 0.02; }
-          100% { transform: translate(0%, 0%) scale(1); opacity: 0.03; }
+          0%   { transform: translate(0%, 0%) scale(1); opacity: 0.08; }
+          30%  { transform: translate(-20%, 10%) scale(1.2); opacity: 0.16; }
+          60%  { transform: translate(10%, -15%) scale(0.9); opacity: 0.06; }
+          100% { transform: translate(0%, 0%) scale(1); opacity: 0.08; }
         }
         @keyframes ambientDrift3 {
-          0%   { transform: translate(0%, 0%) scale(1.1); opacity: 0.025; }
-          35%  { transform: translate(10%, 20%) scale(0.85); opacity: 0.055; }
-          65%  { transform: translate(-10%, -10%) scale(1.2); opacity: 0.02; }
-          100% { transform: translate(0%, 0%) scale(1.1); opacity: 0.025; }
+          0%   { transform: translate(0%, 0%) scale(1.1); opacity: 0.06; }
+          35%  { transform: translate(10%, 20%) scale(0.85); opacity: 0.14; }
+          65%  { transform: translate(-10%, -10%) scale(1.2); opacity: 0.05; }
+          100% { transform: translate(0%, 0%) scale(1.1); opacity: 0.06; }
         }
         @keyframes ambientDrift4 {
-          0%   { transform: translate(0%, 0%) scale(0.9); opacity: 0.02; }
-          40%  { transform: translate(-8%, -18%) scale(1.15); opacity: 0.05; }
-          70%  { transform: translate(12%, 8%) scale(1); opacity: 0.015; }
-          100% { transform: translate(0%, 0%) scale(0.9); opacity: 0.02; }
+          0%   { transform: translate(0%, 0%) scale(0.9); opacity: 0.05; }
+          40%  { transform: translate(-8%, -18%) scale(1.15); opacity: 0.13; }
+          70%  { transform: translate(12%, 8%) scale(1); opacity: 0.04; }
+          100% { transform: translate(0%, 0%) scale(0.9); opacity: 0.05; }
         }
       `}</style>
 
@@ -422,22 +422,22 @@ export default function TheBrief() {
         <div style={{
           position: "absolute", width: "60vw", height: "60vw", top: "-10%", left: "-10%",
           borderRadius: "50%", background: "radial-gradient(circle, #4E9FFF 0%, transparent 70%)",
-          filter: "blur(120px)", animation: "ambientDrift1 18s ease-in-out infinite",
+          filter: "blur(100px)", animation: "ambientDrift1 18s ease-in-out infinite",
         }} />
         <div style={{
           position: "absolute", width: "50vw", height: "50vw", bottom: "-15%", right: "-10%",
           borderRadius: "50%", background: "radial-gradient(circle, #A78BFA 0%, transparent 70%)",
-          filter: "blur(140px)", animation: "ambientDrift2 23s ease-in-out infinite",
+          filter: "blur(110px)", animation: "ambientDrift2 23s ease-in-out infinite",
         }} />
         <div style={{
           position: "absolute", width: "45vw", height: "45vw", top: "40%", left: "50%",
           borderRadius: "50%", background: "radial-gradient(circle, #34D399 0%, transparent 70%)",
-          filter: "blur(130px)", animation: "ambientDrift3 27s ease-in-out infinite",
+          filter: "blur(105px)", animation: "ambientDrift3 27s ease-in-out infinite",
         }} />
         <div style={{
           position: "absolute", width: "55vw", height: "55vw", top: "10%", right: "30%",
           borderRadius: "50%", background: "radial-gradient(circle, #FBBF24 0%, transparent 70%)",
-          filter: "blur(150px)", animation: "ambientDrift4 31s ease-in-out infinite",
+          filter: "blur(115px)", animation: "ambientDrift4 31s ease-in-out infinite",
         }} />
       </div>
 
