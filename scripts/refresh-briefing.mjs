@@ -96,7 +96,8 @@ async function main() {
     console.error('MindStudio agent failed:', err.message);
 
     const existingContent = gist.files?.['briefing.json']?.content;
-    if (existingContent && existingContent !== '{}') {
+    const hasRealData = existingContent && existingContent !== '{}' && existingContent.includes('"stories"');
+    if (hasRealData) {
       console.log('Keeping existing cached data (agent failure is non-destructive).');
       process.exit(0);
     }
