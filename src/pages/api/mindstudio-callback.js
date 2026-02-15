@@ -22,9 +22,36 @@ export default async function handler(req, res) {
   try {
     const payload = req.body;
 
-    console.log('Callback payload keys:', Object.keys(payload || {}));
-    console.log('Callback payload.result keys:', Object.keys(payload?.result || {}));
-    console.log('Callback payload sample:', JSON.stringify(payload).slice(0, 1000));
+    // DEBUG: Write raw payload structure to Gist so we can inspect it
+    const debugInfo = {
+      _debug: true,
+      _timestamp: new Date().toISOString(),
+      topLevelKeys: Object.keys(payload || {}),
+      resultKeys: Object.keys(payload?.result || {}),
+      resultType: typeof payload?.result,
+      hasResultBriefingAI: !!payload?.result?.briefingAI,
+      hasResultBriefingJson: !!payload?.result?.briefing_json,
+      hasBriefingAI: !!payload?.briefingAI,
+      hasResultStories: !!payload?.result?.stories,
+      payloadSample: JSON.stringify(payload).slice(0, 3000),
+    };
+
+    // Write debug to Gist regardless of whether extraction succeeds
+    await fetch(`https://api.github.com/gists/${gistId}`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${gistToken}`,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        files: {
+          'debug-callback.json': {
+            content: JSON.stringify(debugInfo, null, 2),
+          },
+        },
+      }),
+    });
 
     // Try multiple extraction paths — MindStudio may nest data differently
     let briefing = payload?.result?.briefingAI
@@ -44,8 +71,7 @@ export default async function handler(req, res) {
     }
 
     if (!briefing || !briefing.stories) {
-      console.error('No valid briefing after all extraction attempts. Payload keys:', Object.keys(payload || {}), 'Result keys:', Object.keys(payload?.result || {}));
-      return res.status(400).json({ error: 'No valid briefing data in callback.' });
+      return res.status(400).json({ error: 'No valid briefing data in callback. Check debug-callback.json in Gist.' });
     }
 
     const cached = {
